@@ -4,7 +4,9 @@
  */
 package com.mycompany.veri_yapilari_deneme;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +70,7 @@ public class Liste {
             }
             
         }
-        
+        dosyayaYaz();
     }
     
     
@@ -171,15 +173,26 @@ public class Liste {
                     break;
                 }
             }
-        } catch(IOException exception){
+        } catch(Exception e){
             System.out.println("Hata");
         }
-        
-        
     }
 
     public void dosyayaYaz() {
-        
+        Yemek gecici = ilkYemek;
+        String satir = "";
+        try {
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("src/main/java/com/mycompany/veri_yapilari_deneme/yemekListesi.txt",false));
+            while (gecici != null) {                
+                satir = gecici.getYemekAdi() + " " + gecici.getYemekGramaji() + " " + gecici.getYemekFiyati() + "\n";
+                bufferedWriter.write(satir);
+                gecici = gecici.sonrakiYemek;
+            } 
+            bufferedWriter.close();
+        } catch (Exception e) {
+            System.out.println("hata");
+        }
+            
     }
 
     
