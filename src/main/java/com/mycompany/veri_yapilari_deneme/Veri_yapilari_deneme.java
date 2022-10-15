@@ -15,7 +15,9 @@ public class Veri_yapilari_deneme {
         
         Liste liste = new Liste();
         
-        liste.oku();
+        liste.dosyadanOku();
+        liste.dosyadakileriTopluEkle();
+        liste.menu();
         
         /*
         liste.yemekEkle("ispanak", 80, 40);

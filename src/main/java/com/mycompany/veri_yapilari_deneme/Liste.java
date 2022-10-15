@@ -23,6 +23,14 @@ public class Liste {
     List<Double> okunanYemekFiyatlari = new ArrayList<Double>();
 
     
+    void dosyadakileriTopluEkle(){
+        for (int i = 0;i<okunanYemekAdlari.size();i++){
+            yemekEkle(okunanYemekAdlari.get(i), okunanYemekGramajlari.get(i), okunanYemekFiyatlari.get(i));
+            System.out.println((i+1) + ". dugum olusturuldu");
+        }
+        
+    }
+    
     
     void yemekEkle(String yemekAdi, int yemekGramaji, double yemekFiyati){
                 
@@ -35,7 +43,7 @@ public class Liste {
             sonYemek = ilkYemek;
             ilkYemek.sonrakiYemek = null;
             sonYemek.sonrakiYemek = null;
-            System.out.println("bos listeye eklendi");
+            //System.out.println("bos listeye eklendi");
             
         } else {  // Liste bos degilse
             if(ilkYemek.getYemekFiyati() > eklenecekYemek.getYemekFiyati()){ //Girilen sayi ilk sayidan kucukse
@@ -132,11 +140,10 @@ public class Liste {
                     }
                 }
                 
-                System.out.println("Valla elimizde olan bunlar, en iyisi biz sizi ana menuye yonlendirelim oradan istediginiz yemegi ekleyin .\n");
                 menu();
                 break;
             case 5:
-                
+                System.exit(0);
                 break;
             default:
                 System.out.println("Hatali giris yaptiniz.");
@@ -145,7 +152,7 @@ public class Liste {
     }
     
     
-    public void oku() {
+    public void dosyadanOku() {
         List<String> list = new ArrayList<String>();
         String satir;
         
@@ -168,13 +175,11 @@ public class Liste {
             System.out.println("Hata");
         }
         
-        System.out.println(okunanYemekAdlari);
-        System.out.println(okunanYemekGramajlari);
-        System.out.println(okunanYemekFiyatlari);
+        
     }
 
-    public void yaz() {
-
+    public void dosyayaYaz() {
+        
     }
 
     
