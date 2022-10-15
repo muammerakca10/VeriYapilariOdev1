@@ -14,8 +14,8 @@ public class Veri_yapilari_deneme {
     public static void main(String[] args) {
         
         Liste liste = new Liste();
-        Dosya dosya = new Dosya();
-        dosya.oku();
+        
+        liste.oku();
         
         /*
         liste.yemekEkle("ispanak", 80, 40);

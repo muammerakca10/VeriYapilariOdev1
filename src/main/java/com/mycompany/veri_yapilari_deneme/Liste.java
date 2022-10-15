@@ -3,15 +3,25 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.veri_yapilari_deneme;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 /**
  *
- * @author MuammerAkca
+ * @author Air
  */
 public class Liste {
     Yemek ilkYemek = null;
     Yemek sonYemek = null;
     Scanner sc = new Scanner(System.in);
+    
+    List<String> okunanYemekAdlari = new ArrayList<String>();
+    List<Integer> okunanYemekGramajlari = new ArrayList<Integer>();
+    List<Double> okunanYemekFiyatlari = new ArrayList<Double>();
+
     
     
     void yemekEkle(String yemekAdi, int yemekGramaji, double yemekFiyati){
@@ -132,8 +142,41 @@ public class Liste {
                 System.out.println("Hatali giris yaptiniz.");
                 //menu();
         }
-        
     }
+    
+    
+    public void oku() {
+        List<String> list = new ArrayList<String>();
+        String satir;
+        
+        try  {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader("src/main/java/com/mycompany/veri_yapilari_deneme/yemekListesi.txt"));
+            
+            while(true){
+                satir = bufferedReader.readLine();
+                if (satir != null){
+                    String[] okunanSatir = satir.split(" ");
+                    okunanYemekAdlari.add(okunanSatir[0]);
+                    okunanYemekGramajlari.add(Integer.parseInt(okunanSatir[1]));
+                    okunanYemekFiyatlari.add(Double.parseDouble(okunanSatir[2]));
+                    System.out.println(satir);
+                }else{
+                    break;
+                }
+            }
+        } catch(IOException exception){
+            System.out.println("Hata");
+        }
+        
+        System.out.println(okunanYemekAdlari);
+        System.out.println(okunanYemekGramajlari);
+        System.out.println(okunanYemekFiyatlari);
+    }
+
+    public void yaz() {
+
+    }
+
     
     
 }
