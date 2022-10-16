@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.veri_yapilari_deneme;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -11,56 +12,55 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
 /**
  *
  * @author Air
  */
 public class Liste {
+
     Yemek ilkYemek = null;
     Yemek sonYemek = null;
     Scanner sc = new Scanner(System.in);
-    
+
     List<String> okunanYemekAdlari = new ArrayList<String>();
     List<Integer> okunanYemekGramajlari = new ArrayList<Integer>();
     List<Double> okunanYemekFiyatlari = new ArrayList<Double>();
 
-    
-    void dosyadakileriTopluEkle(){
-        for (int i = 0;i<okunanYemekAdlari.size();i++){
+    void dosyadakileriTopluEkle() {
+        for (int i = 0; i < okunanYemekAdlari.size(); i++) {
             yemekEkle(okunanYemekAdlari.get(i), okunanYemekGramajlari.get(i), okunanYemekFiyatlari.get(i));
-            System.out.println((i+1) + ". dugum olusturuldu");
+            System.out.println((i + 1) + ". dugum olusturuldu");
         }
-        
+
     }
-    
-    
-    void yemekEkle(String yemekAdi, int yemekGramaji, double yemekFiyati){
-                
+
+    void yemekEkle(String yemekAdi, int yemekGramaji, double yemekFiyati) {
+
         Yemek eklenecekYemek = new Yemek(yemekAdi, yemekGramaji, yemekFiyati);
         Yemek gecici = ilkYemek;
 
-        
-        if (ilkYemek == null){  //Liste bos ise
+        if (ilkYemek == null) {  //Liste bos ise
             ilkYemek = eklenecekYemek;
             sonYemek = ilkYemek;
             ilkYemek.sonrakiYemek = null;
             sonYemek.sonrakiYemek = null;
             //System.out.println("bos listeye eklendi");
-            
+
         } else {  // Liste bos degilse
-            if(ilkYemek.getYemekFiyati() > eklenecekYemek.getYemekFiyati()){ //Girilen sayi ilk sayidan kucukse
+            if (ilkYemek.getYemekFiyati() > eklenecekYemek.getYemekFiyati()) { //Girilen sayi ilk sayidan kucukse
                 eklenecekYemek.sonrakiYemek = ilkYemek;
                 ilkYemek = eklenecekYemek;
             } else {
-                while(gecici != null){  //gecici elemaninin sonraki null ise ve son elemandan buyukse (sona ekleme)
-                    if(gecici.sonrakiYemek == null && gecici.getYemekFiyati() <= eklenecekYemek.getYemekFiyati()){
+                while (gecici != null) {  //gecici elemaninin sonraki null ise ve son elemandan buyukse (sona ekleme)
+                    if (gecici.sonrakiYemek == null && gecici.getYemekFiyati() <= eklenecekYemek.getYemekFiyati()) {
                         eklenecekYemek.sonrakiYemek = null;
                         gecici.sonrakiYemek = eklenecekYemek;
                         sonYemek = eklenecekYemek;
                         break;
                     }
                     //Araya ekleme
-                    if(gecici.sonrakiYemek.getYemekFiyati() > eklenecekYemek.getYemekFiyati()){
+                    if (gecici.sonrakiYemek.getYemekFiyati() > eklenecekYemek.getYemekFiyati()) {
                         eklenecekYemek.sonrakiYemek = gecici.sonrakiYemek;
                         gecici.sonrakiYemek = eklenecekYemek;
                         break;
@@ -68,44 +68,85 @@ public class Liste {
                     gecici = gecici.sonrakiYemek;
                 }
             }
-            
+
         }
         dosyayaYaz();
     }
-    
-    
-    
-    void yazdir(){
-        Yemek gecici = ilkYemek;
+
+    void sil() {
+        Yemek gecici, birOnceki;
         
-        if(gecici == null){
+        gecici = ilkYemek;
+        birOnceki = null;
+        String silinecekYemekAdi;
+        System.out.println("Silinecek yemek adini giriniz.");
+        silinecekYemekAdi = sc.next().toLowerCase();
+        
+        
+        
+        while(gecici != null){
+            if(gecici.getYemekAdi().toLowerCase().equals(silinecekYemekAdi)) break;
+            birOnceki = gecici;
+            gecici = gecici.sonrakiYemek;
+        }
+        
+        if(gecici!=null){ //Silinecek kayit bulunduysa
+            if (gecici == ilkYemek){ //Silinecek kayit ilkse
+                if (ilkYemek.sonrakiYemek == null){ //Tek kayit varsa
+                    ilkYemek = null;
+                    sonYemek = null;
+                } else { //Ilk kayit silinecek ama birden fazla kayit var ise
+                    ilkYemek = ilkYemek.sonrakiYemek;
+                }
+            } else { //Ilk kayit degilse
+                if (gecici.sonrakiYemek == null){ //Son kayit silinecekse
+                    birOnceki.sonrakiYemek = null;
+                    sonYemek = birOnceki;
+                } else { //Aradan kayit silinecekse
+                    birOnceki.sonrakiYemek = gecici.sonrakiYemek;
+                }
+            } 
+            dosyayaYaz();
+            System.out.println("Basariyla silindi. Ana menuye yonlendiriliyorsunuz.");
+        } else {
+            System.out.println("Silinecek kayit bulunamadi, Ana menuye yonlendiriliyorsunuz.");
+        }
+        
+        menu();
+
+    }
+
+    void yazdir() {
+        Yemek gecici = ilkYemek;
+
+        if (gecici == null) {
             System.out.println("Liste Bos");
         } else {
-            while(gecici != null){
-                
-                System.out.println("Yemek adi : " + gecici.getYemekAdi() 
+            while (gecici != null) {
+
+                System.out.println("Yemek adi : " + gecici.getYemekAdi()
                         + " // Yemek gramaji : " + gecici.getYemekGramaji()
                         + " // Yemek fiyati : " + gecici.getYemekFiyati());
                 gecici = gecici.sonrakiYemek;
             }
         }
     }
-    
-    public void menu(){
+
+    public void menu() {
         int secim, eklenecekYemekGramaji, sira;
         char yemekIstiyorMu;
         String eklenecekYemekAdi;
         double eklenecekYemekFiyati;
-              
+
         System.out.println(" --Yemekhane Otomasyonu--");
         System.out.println("1-Yemek ekle");
-        System.out.println("2-Yemek sil");
+        System.out.println("2-Yemek sil (Yemek tam adini giriniz)");
         System.out.println("3-Yemekleri listele");
-        System.out.println("4-Yemek Sec (Yemek tam adini giriniz)");
+        System.out.println("4-Yemek Sec");
         System.out.println("5-Cikis");
-        
+
         secim = sc.nextInt();
-        
+
         switch (secim) {
             case 1:
                 System.out.println("Yemek adini giriniz: ");
@@ -114,15 +155,16 @@ public class Liste {
                 eklenecekYemekGramaji = sc.nextInt();
                 System.out.println("Yemek fiyatini giriniz: ");
                 eklenecekYemekFiyati = sc.nextDouble();
-                
+
                 yemekEkle(eklenecekYemekAdi, eklenecekYemekGramaji, eklenecekYemekFiyati);
                 System.out.println("Basariyla eklendi.");
                 menu();
                 break;
-                
+
             case 2:
+                sil();
                 break;
-                
+
             case 3:
                 yazdir();
                 menu();
@@ -130,18 +172,18 @@ public class Liste {
             case 4:
                 System.out.println("Secmek istediginiz yemek listelendiginde, yemegi secmek icin e, atlamak icin herhangi bir tusa basiniz.");
                 Yemek gecici = ilkYemek;
-                while(gecici != null){
+                while (gecici != null) {
                     System.out.println(gecici.getYemekAdi() + "  " + gecici.getYemekGramaji() + "gr  " + gecici.getYemekFiyati() + "TL");
                     yemekIstiyorMu = sc.next().charAt(0);
-                    if(yemekIstiyorMu == 'e'){
-                        System.out.println("Yemek secildi, siparis hazirlaniyor.");
+                    if (yemekIstiyorMu == 'e') {
+                        System.out.println(gecici.getYemekAdi() + " secildi, siparis hazirlaniyor. Borcunuz : " + gecici.getYemekFiyati());
                         break;
                     } else {
                         gecici = gecici.sonrakiYemek;
                         continue;
                     }
                 }
-                
+
                 menu();
                 break;
             case 5:
@@ -149,31 +191,30 @@ public class Liste {
                 break;
             default:
                 System.out.println("Hatali giris yaptiniz.");
-                //menu();
+            //menu();
         }
     }
-    
-    
+
     public void dosyadanOku() {
         List<String> list = new ArrayList<String>();
         String satir;
-        
-        try  {
+
+        try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader("src/main/java/com/mycompany/veri_yapilari_deneme/yemekListesi.txt"));
-            
-            while(true){
+
+            while (true) {
                 satir = bufferedReader.readLine();
-                if (satir != null){
+                if (satir != null) {
                     String[] okunanSatir = satir.split(" ");
                     okunanYemekAdlari.add(okunanSatir[0]);
                     okunanYemekGramajlari.add(Integer.parseInt(okunanSatir[1]));
                     okunanYemekFiyatlari.add(Double.parseDouble(okunanSatir[2]));
                     System.out.println(satir);
-                }else{
+                } else {
                     break;
                 }
             }
-        } catch(Exception e){
+        } catch (Exception e) {
             System.out.println("Hata");
         }
     }
@@ -182,19 +223,17 @@ public class Liste {
         Yemek gecici = ilkYemek;
         String satir = "";
         try {
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("src/main/java/com/mycompany/veri_yapilari_deneme/yemekListesi.txt",false));
-            while (gecici != null) {                
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("src/main/java/com/mycompany/veri_yapilari_deneme/yemekListesi.txt", false));
+            while (gecici != null) {
                 satir = gecici.getYemekAdi() + " " + gecici.getYemekGramaji() + " " + gecici.getYemekFiyati() + "\n";
                 bufferedWriter.write(satir);
                 gecici = gecici.sonrakiYemek;
-            } 
+            }
             bufferedWriter.close();
         } catch (Exception e) {
             System.out.println("hata");
         }
-            
+
     }
 
-    
-    
 }

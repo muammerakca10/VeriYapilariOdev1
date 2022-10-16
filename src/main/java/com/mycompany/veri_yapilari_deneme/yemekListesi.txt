@@ -2,5 +2,5 @@ Mercimek_Çorbası 150 19.9
 Tavuk_Döner 100 24.5
 asd 180 25.5
 muammer 300 35.0
+kebap 210 46.0
 Et_Döner 100 49.5
-Köfte 200 59.9
